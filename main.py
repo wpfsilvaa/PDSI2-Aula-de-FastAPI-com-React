@@ -12,7 +12,7 @@ app = FastAPI()
 
 @app.get("/")
 async def root(): 
-    return {"Hello":"World!"}
+    return {"Hello":"World!!"}
 
 @app.post("/criar", status_code=status.HTTP_201_CREATED)
 async def criar_valores(nova_mensagem: classes.Mensagem, db:Session = Depends(get_db)):
