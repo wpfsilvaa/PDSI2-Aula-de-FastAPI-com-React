@@ -26,15 +26,15 @@ jobs:
           sudo apt update
           sudo apt install postgresql -y
           sudo systemctl start postgresql
-          sudo -u postgres psql
-          CREATE DATABASE data_ufu;
-          GRANT ALL PRIVILEGES ON DATABASE data_ufu TO postgres;
+          sudo -u postgres psql -c "CREATE DATABASE data_ufu;"
+          sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE data_ufu TO postgres;"
           
       - name: Run tests
+        env:
+          DB_USER: postgres
+          DB_PASSWORD: ""
+          DB_HOST: localhost
+          DB_NAME: data_ufu
         run: |
           source .venv/bin/activate
-          export DB_USER = "postgres"
-          export DB_PASSWORD = ""
-          export DB_HOST = "localhost"
-          export DB_NAME = "data_ufu"
           pytest case_tests.py
