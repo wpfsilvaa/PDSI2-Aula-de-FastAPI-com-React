@@ -24,13 +24,17 @@ async def criar_valores(nova_mensagem: classes.Mensagem, db:Session = Depends(ge
     db.commit()
     db.refresh(mensagem_criada)
 
-    return {"Mensagem criada": {
+    return {"Inserido na tabela": {
         "id": mensagem_criada.id,
         "titulo": mensagem_criada.titulo,
         "conteudo": mensagem_criada.conteudo,
         "publicada": mensagem_criada.publicada,
         "created_at": mensagem_criada.created_at
     }}
+
+@app.get("/webscraping")
+async def retorna_webscraping():
+    return {"mensagem":"ok"}
 
 @app.get("/quadrado/{num}")
 def square(num:int):
