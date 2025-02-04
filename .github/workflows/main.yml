@@ -12,12 +12,16 @@ jobs:
       - name: Instalar python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.13.1"  # Escolha a versão do Python desejada
+          python-version: "3.13.1"
 
       - name: Instalar dependencias
         run: |
+          python -m venv .venv
+          source .venv/bin/activate
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
       - name: Run tests
-        run: pytest case_tests.py
+        run: |
+          source venv/bin/activate
+          pytest case_tests.py
