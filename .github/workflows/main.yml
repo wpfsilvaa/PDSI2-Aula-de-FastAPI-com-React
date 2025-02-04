@@ -11,3 +11,6 @@ jobs:
 
       - name: Hello
         run: echo "Hello"
+
+      - name: git-versao
+        run: python --version
