@@ -13,4 +13,4 @@ jobs:
         run: echo "Hello"
 
       - name: git-versao
-        run: python --version
+        run: pytest case_tests.py
