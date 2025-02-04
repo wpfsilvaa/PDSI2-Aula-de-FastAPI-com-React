@@ -3,14 +3,21 @@ name: Build and deploy
 on: [push, pull_request]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     steps:
-      - name: pulling git repo
+      - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Hello
-        run: echo "Hello"
+      - name: Instalar python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.13.1"  # Escolha a versão do Python desejada
 
-      - name: git-versao
+      - name: Instalar dependencias
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run tests
         run: pytest case_tests.py
