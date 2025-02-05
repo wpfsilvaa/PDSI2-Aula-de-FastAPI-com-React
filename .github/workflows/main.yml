@@ -40,6 +40,11 @@ jobs:
           done
 
       - name: Run tests
+        env:
+            DB_USER: postgres
+            DB_PASSWORD: "IssoJ4éL<>CuR4." 
+            DB_HOST: localhost
+            DB_NAME: data_ufu
         run: |
           source .venv/bin/activate
           pytest case_tests.py
