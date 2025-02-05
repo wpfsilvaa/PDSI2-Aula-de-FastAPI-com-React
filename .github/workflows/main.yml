@@ -25,7 +25,10 @@ jobs:
         run: |
           sudo apt update
           sudo apt install postgresql -y
+          sudo -u postgres initdb -D /var/lib/postgresql/data
           sudo systemctl start postgresql
+          sudo systemctl enable postgresql
+          sleep 10
           sudo -u postgres psql -c "CREATE DATABASE data_ufu;"
           sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE data_ufu TO postgres;"
           
