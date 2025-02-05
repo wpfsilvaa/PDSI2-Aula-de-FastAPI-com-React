@@ -28,9 +28,9 @@ jobs:
           sudo systemctl start postgresql
           sudo systemctl enable postgresql
           sleep 10
-          sudo -u postgres psql -c "CREATE DATABASE data_ufu;"
-          sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE data_ufu TO postgres;"
-          sudo -u postgres psql -c "ALTER USER postgres WITH PASSWORD 'IssoJ4éL<>CuR4.';"
+          sudo -u postgres psql -c "CREATE DATABASE ${DB_NAME};"
+          sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE ${DB_NAME} TO ${DB_USER};"
+          sudo -u postgres psql -c "ALTER USER $DB_USER WITH PASSWORD '${DB_PASSWORD}';"
 
       - name: Aguardar o PostgreSQL ficar pronto
         run: |
@@ -41,10 +41,10 @@ jobs:
 
       - name: Run tests
         env:
-            DB_USER: postgres
-            DB_PASSWORD: "IssoJ4éL<>CuR4." 
-            DB_HOST: localhost
-            DB_NAME: data_ufu
+            DB_USER: ${{ secrets.DB_USER }}
+            DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+            DB_HOST: ${{ secrets.DB_HOST }}
+            DB_NAME: ${{ secrets.DB_NAME }}
         run: |
           source .venv/bin/activate
           pytest case_tests.py
