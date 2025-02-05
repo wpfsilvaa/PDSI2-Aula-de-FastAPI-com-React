@@ -24,7 +24,7 @@ jobs:
       - name: Instalar e configurar postgresql
         run: |
           sudo apt update
-          sudo apt install postgresql -y
+          sudo apt install postgresql-client postgresql-common -y
           sudo -u postgres initdb -D /var/lib/postgresql/data
           sudo systemctl start postgresql
           sudo systemctl enable postgresql
