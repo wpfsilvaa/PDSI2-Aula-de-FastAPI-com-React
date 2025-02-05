@@ -22,19 +22,14 @@ jobs:
           pip install -r requirements.txt
 
       - name: Instalar e configurar postgresql
-        env:
-            DB_USER: ${{ secrets.DB_USER }}
-            DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-            DB_HOST: ${{ secrets.DB_HOST }}
-            DB_NAME: ${{ secrets.DB_NAME }}
         run: |
           sudo apt update
           sudo apt install postgresql-client postgresql-common -y
           sudo systemctl start postgresql
           sudo systemctl enable postgresql
           sleep 10
-          sudo -u postgres psql -c "CREATE DATABASE $DB_NAME OWNER $DB_USER;"
-          sudo -u postgres psql -c "ALTER USER $DB_USER WITH PASSWORD '$DB_PASSWORD';"
+          sudo -u postgres psql -c "CREATE DATABASE ${{ secrets.DB_NAME }} OWNER ${{ secrets.DB_USER }};"
+          sudo -u postgres psql -c "ALTER USER ${{ secrets.DB_USER }} WITH PASSWORD '${{ secrets.DB_PASSWORD }}';"
 
       - name: Aguardar o PostgreSQL ficar pronto
         run: |
