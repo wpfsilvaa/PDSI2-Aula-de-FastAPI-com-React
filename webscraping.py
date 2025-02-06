@@ -4,10 +4,7 @@ from urllib.parse import urljoin
 import json
 from datetime import date
 
-def editais_ufu(filtros_orgs_on = False , filtros_tipos_on = False):
-    # Os filtros são definidos nessas duas listas
-    filtros_orgs = {"FMVZ","PET Sistemas de Informação", "PET Sistemas de Informação - Monte Carmelo", "PETSIMC", "PET Sistemas de Informação - Monte Carmelo", "PET Ciência da Computação", "PROPP", "PET Sistemas de Informação",  }
-    filtros_tipos = {"Programa PET", "Estágio UFU", "Mest./Dout./Especializ.", "Monitoria"}
+def editais_ufu():
 
     # Obtém o ano atual para comparar com a data dos editais e transforma em String
     data_atual = date.today()
@@ -74,17 +71,7 @@ def editais_ufu(filtros_orgs_on = False , filtros_tipos_on = False):
                         'link': link_edital
                     }
                     if(ano_edital == ano_atual):
-                        if (filtros_orgs_on and filtros_tipos_on):
-                            if (orgao_responsavel in filtros_orgs) and (tipo in filtros_tipos):
-                                editais_data.append(edital_info)
-                        elif (filtros_orgs_on == False) and (filtros_tipos_on):
-                            if(tipo in filtros_tipos):
-                                editais_data.append(edital_info)
-                        elif (filtros_orgs_on) and (filtros_tipos_on == False):
-                            if(orgao_responsavel in filtros_orgs):
-                                editais_data.append(edital_info)
-                        else:
-                            editais_data.append(edital_info)
+                        editais_data.append(edital_info)
             # Se o ano do edital não for o ano atual, interrompe a busca
             if(ano_edital < ano_atual):
                 continuar = False
