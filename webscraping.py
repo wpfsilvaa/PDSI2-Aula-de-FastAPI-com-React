@@ -120,7 +120,7 @@ def desafio():
                 nome_link = link_tag.get_text(strip=True)  # Extrai o texto (nome do link)
                 link = urljoin(url, link_tag['href'])  # Cria o URL completo
                 links_info.append({
-                    'nome_link': nome_link,
+                    'menuNav': nome_link,
                     'link': link
                 })
         return links_info

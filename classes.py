@@ -12,3 +12,8 @@ class Edital(BaseModel):
     tipo:str
     data_publicacao:str
     link:str
+
+class desafio(BaseModel):
+    menuNav:str
+    link:str
+    created_at:str

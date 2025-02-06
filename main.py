@@ -34,19 +34,19 @@ async def criar_valores(nova_mensagem: classes.Mensagem, db:Session = Depends(ge
         "created_at": mensagem_criada.created_at
     }}
 
-@app.put("/desafio")
-async def desafio_pdsi2(menus: classes.Edital ,db: Session = Depends(get_db)):
+@app.put("/desafio", status_code=status.HTTP_201_CREATED)
+async def desafio_pdsi2(db: Session = Depends(get_db)):
     menus_salvos = []
     menus = desafio()
 
     for navMenu in menus:
         navMenu_existente = db.query(model.Model_Desafio).filter(
-            model.Model_Desafio.menuNav == navMenu["nome_link"]
+            model.Model_Desafio.menuNav == navMenu["menuNav"]
         ).first()
         
         if not navMenu_existente:
             novo_menu = model.Model_Desafio(
-                menuNav=navMenu["nome_link"],
+                menuNav=navMenu["menuNav"],
                 link=navMenu["link"]
             )
             try:
@@ -58,7 +58,7 @@ async def desafio_pdsi2(menus: classes.Edital ,db: Session = Depends(get_db)):
                 db.rollback()
     if not menus_salvos:
         return Response(status_code=status.HTTP_304_NOT_MODIFIED)
-    return {"mensagem": "Menus processados", "menus_salvos": [menu.menuNav for menu in menus_salvos]}
+    return Response(status_code=status.HTTP_201_CREATED)
 
 
 @app.get("/desafio")
