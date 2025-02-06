@@ -112,6 +112,5 @@ def desafio():
                 })
         return links_info
 
-
-if __name__ == 'main':
-    print("Webscraping Carregado")
+if __name__ == '__main__':
+    print("alo")
