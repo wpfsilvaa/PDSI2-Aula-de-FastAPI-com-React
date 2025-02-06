@@ -36,7 +36,7 @@ async def criar_valores(nova_mensagem: classes.Mensagem, db:Session = Depends(ge
     }}
 
 @app.put("/desafio")
-async def desafio_pdsi2(db: Session = Depends(get_db)):
+async def desafio_pdsi2(menus: classes.Edital ,db: Session = Depends(get_db)):
     menus_salvos = []
     menus = desafio()
 
@@ -105,29 +105,25 @@ async def popula_banco_editais(db: Session = Depends(get_db)):
 @app.get("/webscraping")
 async def retorna_webscraping(
     db: Session = Depends(get_db),
-    filtroOrg: Optional[str] = None,
-    filtroTipo: Optional[str] = None
+    org: Optional[str] = None,
+    tipo: Optional[str] = None
 ):
     query = db.query(model.Model_Editais)
 
-    if filtroOrg and filtroTipo:
-        query = query.filter(
-        model.Model_Editais.orgao_responsavel.ilike(f"%{filtroOrg}%"),
-        model.Model_Editais.tipo.ilike(f"%{filtroTipo}%"))
+    if org:
+        org_lista = org.split(",")
+        query = query.filter(model.Model_Editais.orgao_responsavel.in_(org_lista))
 
-    elif filtroOrg:
-        query = query.filter(model.Model_Editais.orgao_responsavel == filtroOrg)
-    elif filtroTipo:
-        query = query.filter(model.Model_Editais.tipo == filtroTipo)
+    if tipo:
+        tipo_lista = tipo.split(",")
+        query = query.filter(model.Model_Editais.tipo.in_(tipo_lista))
 
-    #print(str(query)) #Debug
     editais = query.all()
 
     if not editais:
         return {"Mensagem": "Nenhum edital encontrado com os filtros fornecidos"}
 
     return editais
-
 
 @app.get("/quadrado/{num}")
 def square(num:int):

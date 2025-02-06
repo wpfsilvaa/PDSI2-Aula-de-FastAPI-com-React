@@ -101,10 +101,13 @@ def editais_ufu(filtros_orgs_on = False , filtros_tipos_on = False):
 
 def desafio():
     url = f"http://ufu.br"
+    # Faz uma requisição HTTP para obter o conteúdo da página
     response = requests.get(url)
+    # Verifica se a requisição foi bem-sucedida (status 200)
     if response.status_code == 200:
-        
+        # Analisa o conteúdo da página HTML
         soup = BeautifulSoup(response.text, 'html.parser')
+        # Encontra todos os menus, eles estão em formato de lista
         blocos = soup.find_all('li')
         
         # Lista para armazenar os resultados
@@ -112,7 +115,7 @@ def desafio():
 
         # Iterando sobre os elementos encontrados
         for bloco in blocos:
-            link_tag = bloco.find('a')  # Encontra a tag <a> dentro de <li>
+            link_tag = bloco.find('a')  # Encontra a tag <a> 'link' dentro do <li>
             if link_tag:  # Verifica se a tag <a> existe
                 nome_link = link_tag.get_text(strip=True)  # Extrai o texto (nome do link)
                 link = urljoin(url, link_tag['href'])  # Cria o URL completo
@@ -120,7 +123,6 @@ def desafio():
                     'nome_link': nome_link,
                     'link': link
                 })
-        #return json.dumps(links_info, indent=4)
         return links_info
 
 
