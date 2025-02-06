@@ -8,7 +8,6 @@ from webscraping import editais_ufu,desafio
 from typing import Optional
 from sqlalchemy.exc import IntegrityError
 
-
 model.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
@@ -50,7 +49,6 @@ async def desafio_pdsi2(menus: classes.Edital ,db: Session = Depends(get_db)):
                 menuNav=navMenu["nome_link"],
                 link=navMenu["link"]
             )
-            
             try:
                 db.add(novo_menu)
                 db.commit()
