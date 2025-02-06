@@ -1,10 +1,10 @@
-from fastapi import FastAPI, status, Depends
+from fastapi import FastAPI, status, Depends, Response
 from fastapi.params import Body
 import classes
 import model
 from database import engine,get_db
 from sqlalchemy.orm import Session
-from data_ufu_editais import editais_ufu
+from webscraping import editais_ufu,desafio
 from typing import Optional
 from sqlalchemy.exc import IntegrityError
 
@@ -35,6 +35,41 @@ async def criar_valores(nova_mensagem: classes.Mensagem, db:Session = Depends(ge
         "created_at": mensagem_criada.created_at
     }}
 
+@app.put("/desafio")
+async def desafio_pdsi2(db: Session = Depends(get_db)):
+    menus_salvos = []
+    menus = desafio()
+
+    for navMenu in menus:
+        navMenu_existente = db.query(model.Model_Desafio).filter(
+            model.Model_Desafio.menuNav == navMenu["nome_link"]
+        ).first()
+        
+        if not navMenu_existente:
+            novo_menu = model.Model_Desafio(
+                menuNav=navMenu["nome_link"],
+                link=navMenu["link"]
+            )
+            
+            try:
+                db.add(novo_menu)
+                db.commit()
+                db.refresh(novo_menu)
+                menus_salvos.append(novo_menu)
+            except IntegrityError:
+                db.rollback()
+    if not menus_salvos:
+        return Response(status_code=status.HTTP_304_NOT_MODIFIED)
+    return {"mensagem": "Menus processados", "menus_salvos": [menu.menuNav for menu in menus_salvos]}
+
+
+@app.get("/desafio")
+async def retorna_desafio(db: Session = Depends(get_db)):
+    query = db.query(model.Model_Desafio)
+    menus = query.all()
+    return menus
+
+
 @app.put("/webscraping", status_code=status.HTTP_201_CREATED)
 async def popula_banco_editais(db: Session = Depends(get_db)):
     editais_salvos = []
@@ -64,8 +99,7 @@ async def popula_banco_editais(db: Session = Depends(get_db)):
                 db.rollback()
 
     if not editais_salvos:
-        return Response(status_code=status.HTTP_304_NOT_MODIFIED, content='{"Mensagem": "Banco de dados já atualizado"}', media_type="application/json")
-
+        return Response(status_code=status.HTTP_304_NOT_MODIFIED)
     return {"Mensagem": editais_salvos}
 
 @app.get("/webscraping")
