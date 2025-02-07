@@ -9,13 +9,13 @@ jobs:
       postgres:
         image: postgres:latest
         env:
-          POSTGRES_DB: ${{ secrets.DB_TEST_CONFIG.DB_NAME }}
-          POSTGRES_USER: ${{ secrets.DB_TEST_CONFIG.DB_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.DB_TEST_CONFIG.DB_PASSWORD }}
+          POSTGRES_DB: ${{ DB.NAME }}
+          POSTGRES_USER: ${{ DB.USER }}
+          POSTGRES_PASSWORD: ${{ DB.PASSWORD }}
         ports:
           - 5432:5432
         options: >-
-          --health-cmd "pg_isready -U postgres"
+          --health-cmd "pg_isready -U $POSTGRES_USER"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
@@ -37,17 +37,12 @@ jobs:
 
       - name: Aguardar o PostgreSQL ficar pronto
         run: |
-          until pg_isready -h localhost -U postgres -p 5432; do
+          until pg_isready -h localhost -U $POSTGRES_USER -p 5432; do
             echo "Aguardando PostgreSQL..."
             sleep 1
           done
 
       - name: Run tests
-        env:
-          DB_USER: ${{ secrets.DB_TEST_CONFIG.DB_USER }}
-          DB_PASSWORD: ${{ secrets.DB_TEST_CONFIG.DB_PASSWORD }}
-          DB_HOST: ${{ secrets.DB_TEST_CONFIG.DB_HOST }}
-          DB_NAME: ${{ secrets.DB_TEST_CONFIG.DB_NAME }}
         run: |
           source .venv/bin/activate
           python -m pytest case_tests.py
