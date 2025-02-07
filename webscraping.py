@@ -95,8 +95,8 @@ def desafio():
         # Analisa o conteúdo da página HTML
         soup = BeautifulSoup(response.text, 'html.parser')
         # Encontra todos os menus, eles estão em formato de lista
-        blocos = soup.find_all('li')
-        
+        blocos = soup.find_all('li', class_ ='nav-item')
+
         # Lista para armazenar os resultados
         links_info = []
 
@@ -113,4 +113,4 @@ def desafio():
         return links_info
 
 if __name__ == '__main__':
-    print("alo")
+    print(desafio())

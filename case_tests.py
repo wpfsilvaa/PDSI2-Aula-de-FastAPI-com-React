@@ -86,4 +86,3 @@ def test_retorna_desafio():
     response = client.get("/desafio")
     assert response.status_code == 200
     assert isinstance(response.json(), list)
-
