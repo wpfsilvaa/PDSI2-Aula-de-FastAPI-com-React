@@ -9,13 +9,13 @@ jobs:
       postgres:
         image: postgres:latest
         env:
-          POSTGRES_DB: data_ufu
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: 'IssoJ4éL<>CuR4.'
+          POSTGRES_DB: ${{ DB_TEST_CONFIG.DB_NAME }}
+          POSTGRES_USER: ${{ DB_TEST_CONFIG.DB_USER }}
+          POSTGRES_PASSWORD: ${{ DB_TEST_CONFIG.DB_PASSWORD }}
         ports:
           - 5432:5432
         options: >-
-          --health-cmd "pg_isready -U postgres"
+          --health-cmd "pg_isready -U $POSTGRES_USER"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
@@ -35,19 +35,12 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Aguardar o PostgreSQL ficar pronto
-        run: |
-          until pg_isready -h localhost -U postgres -p 5432; do
-            echo "Aguardando PostgreSQL..."
-            sleep 1
-          done
-
       - name: Run tests
         env:
-          DB_USER: postgres
-          DB_PASSWORD: 'IssoJ4éL<>CuR4.'
-          DB_HOST: localhost
-          DB_NAME: data_ufu
+          DB_USER: ${{ DB_TEST_CONFIG.DB_USER }}
+          DB_PASSWORD: ${{ DB_TEST_CONFIG.DB_PASSWORD }}
+          DB_HOST: ${{ DB_TEST_CONFIG.DB_HOST }}
+          DB_NAME: ${{ DB_TEST_CONFIG.DB_NAME }}
         run: |
           . .venv/bin/activate
           python -m pytest case_tests.py
