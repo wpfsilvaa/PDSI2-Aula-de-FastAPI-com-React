@@ -9,9 +9,9 @@ jobs:
       postgres:
         image: postgres:latest
         env:
-          POSTGRES_DB: ${{ DB_TEST_CONFIG.DB_NAME }}
-          POSTGRES_USER: ${{ DB_TEST_CONFIG.DB_USER }}
-          POSTGRES_PASSWORD: ${{ DB_TEST_CONFIG.DB_PASSWORD }}
+          POSTGRES_DB: ${{ secrets.DB_TEST_CONFIG.DB_NAME }}
+          POSTGRES_USER: ${{ secrets.DB_TEST_CONFIG.DB_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.DB_TEST_CONFIG.DB_PASSWORD }}
         ports:
           - 5432:5432
         options: >-
@@ -37,10 +37,10 @@ jobs:
 
       - name: Run tests
         env:
-          DB_USER: ${{ DB_TEST_CONFIG.DB_USER }}
-          DB_PASSWORD: ${{ DB_TEST_CONFIG.DB_PASSWORD }}
-          DB_HOST: ${{ DB_TEST_CONFIG.DB_HOST }}
-          DB_NAME: ${{ DB_TEST_CONFIG.DB_NAME }}
+          DB_USER: ${{ secrets.DB_TEST_CONFIG.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_TEST_CONFIG.DB_PASSWORD }}
+          DB_HOST: ${{ secrets.DB_TEST_CONFIG.DB_HOST }}
+          DB_NAME: ${{ secrets.DB_TEST_CONFIG.DB_NAME }}
         run: |
           . .venv/bin/activate
           python -m pytest case_tests.py
