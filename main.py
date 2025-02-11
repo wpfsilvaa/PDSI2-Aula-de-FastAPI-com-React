@@ -65,6 +65,8 @@ async def desafio_pdsi2(db: Session = Depends(get_db)):
 async def retorna_desafio(db: Session = Depends(get_db)):
     query = db.query(model.Model_Desafio)
     menus = query.all()
+    if not menus:
+        return {"Mensagem": "Nenhum menu indexado."}
     return menus
 
 
