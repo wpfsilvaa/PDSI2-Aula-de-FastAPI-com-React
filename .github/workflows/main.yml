@@ -35,13 +35,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Aguardar o PostgreSQL ficar pronto
-        run: |
-          until pg_isready -h localhost -U $POSTGRES_USER -p 5432; do
-            echo "Aguardando PostgreSQL..."
-            sleep 1
-          done
-
       - name: Run tests
         run: |
           source .venv/bin/activate
